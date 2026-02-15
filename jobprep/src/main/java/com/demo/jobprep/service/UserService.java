@@ -6,22 +6,39 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.demo.jobprep.dto.UserRequestDto;
+import com.demo.jobprep.dto.UserResponseDto;
 import com.demo.jobprep.entity.User;
+import com.demo.jobprep.entity.UserMapper;
 import com.demo.jobprep.exception.UserNotFoundException;
 import com.demo.jobprep.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class UserService {
     
     @Autowired
     private UserRepository repo;
 
-    public User saveUser(User user){
-        return repo.save(user);
+    // public User saveUser(User user){
+    //     return repo.save(user);
+    // }
+
+    public UserResponseDto createUser(UserRequestDto dto){
+        User user=UserMapper.toEntity(dto);
+        return UserMapper.toDto(repo.save(user));
     }
 
-    public User getUserById(Long id){
-        return repo.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+
+    // public User getUserById(Long id){
+    //     return repo.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+    // }
+
+    public UserResponseDto getUserById(Long id){
+        User user=repo.findById(id).orElseThrow(()-> new UserNotFoundException("Useer not found with id "+ id));
+        return UserMapper.toDto(user);
     }
 
     public User getUserByEmail(String email){

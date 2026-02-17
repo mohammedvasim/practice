@@ -1,5 +1,6 @@
 package com.demo.jobprep.controller;
 
+import java.util.Base64.Encoder;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +34,9 @@ public class UserController {
     
     @Autowired
     private UserService service;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @GetMapping("/All")
     public List<User> getAllUser(){
@@ -79,6 +84,7 @@ public class UserController {
 
     @PostMapping("/post")
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto dto){
+        dto.setPassword(encoder.encode(dto.getPassword()));
         return new ResponseEntity<>(service.createUser(dto),HttpStatus.CREATED);
     }
 

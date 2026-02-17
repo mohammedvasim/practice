@@ -77,7 +77,7 @@ public class UserController {
     //     return service.saveUser(user);
     // }
 
-    @PostMapping
+    @PostMapping("/post")
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto dto){
         return new ResponseEntity<>(service.createUser(dto),HttpStatus.CREATED);
     }

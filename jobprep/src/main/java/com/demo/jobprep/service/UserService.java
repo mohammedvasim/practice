@@ -54,7 +54,7 @@ public class UserService {
     public User updateUser(Long id,User newUser){
         User olduser=repo.findById(id).orElse(null);
 
-        olduser.setName(newUser.getName());
+        olduser.setUsername(newUser.getUsername());
         olduser.setEmail(newUser.getEmail());
         return repo.save(olduser);
     }

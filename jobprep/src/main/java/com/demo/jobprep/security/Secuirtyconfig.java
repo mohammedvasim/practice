@@ -2,7 +2,7 @@ package com.demo.jobprep.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -23,34 +23,47 @@ public class Secuirtyconfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        // http
+        //     .csrf(csrf->csrf.disable())
+        //     .authorizeHttpRequests(auth->auth
+        //         .requestMatchers("/admin/**").hasRole("ADMIN")  
+        //         .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
+        //         .anyRequest().authenticated()
+        //     )
+        //     .httpBasic(withDefaults());
+        //     return http.build();
+
+
         http
             .csrf(csrf->csrf.disable())
             .authorizeHttpRequests(auth->auth
-                .requestMatchers("/admin/**").hasRole("ADMIN")  
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
                 .anyRequest().authenticated()
             )
-            .httpBasic(withDefaults());
+            .formLogin(Customizer.withDefaults())
+            .httpBasic(Customizer.withDefaults());
+
             return http.build();
     }
-    @Bean
-    public UserDetailsService userDetailsService(){
+    //@Bean
+    // public UserDetailsService userDetailsService(){
 
-        UserDetails user=User.builder()
-                        .username("Vasim")
-                        .password(passwordEncoder().encode("1234"))
-                        .roles("USER")
-                        .build();
+    //     UserDetails user=User.builder()
+    //                     .username("Vasim")
+    //                     .password(passwordEncoder().encode("1234"))
+    //                     .roles("USER")
+    //                     .build();
         
-        UserDetails admin=User.builder()
-                            .username("admin")
-                            .password(passwordEncoder().encode("admin123"))
-                            .roles("ADMIN")
-                            .build();
+    //     UserDetails admin=User.builder()
+    //                         .username("admin")
+    //                         .password(passwordEncoder().encode("admin123"))
+    //                         .roles("ADMIN")
+    //                         .build();
         
-        return new InMemoryUserDetailsManager(user,admin);
+    //     return new InMemoryUserDetailsManager(user,admin);
 
-    }
+    // }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
